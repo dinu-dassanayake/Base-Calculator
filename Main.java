@@ -21,22 +21,39 @@ public class Main {
                 String[] newArray = sorting(input);
                 int inputBase = Integer.parseInt(newArray[0]);
 
+                // Checking if valid base
+                int q = Math.abs(Integer.parseInt(newArray[1].substring(0)));
+                String intString = String.valueOf(q);
+                for(int i = 0; i<=newArray[1].length()-1; i++){
+                    if(Integer.parseInt(intString.substring(i, i+1))>=inputBase){
+                        System.out.println("Integer 1 is not in the valid base, please re-enter a valid integer.");
+                        newArray[1] = sc.next();
+                    }
+                }
+                q = Math.abs(Integer.parseInt(newArray[3].substring(0)));
+                intString = String.valueOf(q);
+                for(int i = 0; i<=newArray[3].length()-1; i++){
+                    if(Integer.parseInt(intString.substring(i, i+1))>=inputBase){
+                        System.out.println("Integer 2 is not in the valid base, please re-enter a valid integer.");
+                        newArray[3] = sc.next();
+                    }
+                }
+
                 // Checking if both ints are positive
-                int temp = Integer.parseInt(newArray[1].substring(1));
-                temp = temp-temp*2;
+                int temp = Integer.parseInt(newArray[1].substring(0));
                 while(temp<0){ //CAN THEY BE ZERO
-                    System.out.println("First Int is Invalid, please re-enter a valid integer");
+                    System.out.println("First Int is Invalid, please re-enter a valid integer.");
                     newArray[1] = sc.next();
                     temp = Integer.parseInt(newArray[1]);
                 }
-                temp = Integer.parseInt(newArray[3].substring(1));
-                temp = temp-temp*2;
+                temp = Integer.parseInt(newArray[3].substring(0));
                 while(temp<0){
-                    System.out.println("Second Int is Invalid, please re-enter a valid integer");
+                    System.out.println("Second Int is Invalid, please re-enter a valid integer.");
                     newArray[3] = sc.next();
                     temp = Integer.parseInt(newArray[3]);
                 }
-                
+
+
                 // Checking Correct Character
                 while (!((newArray[2].equals("+"))||(newArray[2].equals("-"))||(newArray[2].equals("*"))||(newArray[2].equals("/"))||(newArray[2].equals("%")))){
                     System.out.println("Invalid Character, please re-enter whole string.");
@@ -71,8 +88,14 @@ public class Main {
                 int[] baseTenOutput = operations(base10, newArray);
                 System.out.println(Arrays.toString(baseTenOutput));
 
+                int finalAns = outputConverter(outputBase, baseTenOutput);
                 // Final Output
-                System.out.println("Answer: " + (outputConverter(outputBase, baseTenOutput)));
+                if(baseTenOutput[1]==0){  //Remainder
+                    System.out.println("Answer: " + finalAns);
+                } else {
+                    System.out.println("Answer: " + finalAns +" R "+ baseTenOutput[1]);
+                }
+
 
             } else if (option == 2) {
                 menu = false;
@@ -151,7 +174,8 @@ public class Main {
                     result[0] = base10[0]/base10[1];
                     result[1] = base10[0]%base10[1];
                 } else {
-                    System.out.println("please retry");
+                    result[1] = base10[1]/base10[0];
+                    result[0] = base10[1]%base10[0];
                 }
                 break;
             case "%":
@@ -164,8 +188,8 @@ public class Main {
     }
 
     public static int outputConverter(int outputBase, int[] a){
-        int initial = 201;
-        int remainder = 0;
+        int initial = Math.abs(a[0]);
+        int remainder = a[1];
         int result = 0;
         int multiplier = 1;
 
