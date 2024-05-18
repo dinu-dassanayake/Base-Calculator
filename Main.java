@@ -17,33 +17,62 @@ public class Main {
                 input = sc.nextLine();
                 System.out.println("Enter the output base between 2 and 10");
                 int outputBase = sc.nextInt();
+                sc.nextLine();
                 String[] newArray = sorting(input);
                 int inputBase = Integer.parseInt(newArray[0]);
+
+                // Checking if both ints are positive
+                int temp = Integer.parseInt(newArray[1].substring(1));
+                temp = temp-temp*2;
+                while(temp<0){ //CAN THEY BE ZERO
+                    System.out.println("First Int is Invalid, please re-enter a valid integer");
+                    newArray[1] = sc.next();
+                    temp = Integer.parseInt(newArray[1]);
+                }
+                temp = Integer.parseInt(newArray[3].substring(1));
+                temp = temp-temp*2;
+                while(temp<0){
+                    System.out.println("Second Int is Invalid, please re-enter a valid integer");
+                    newArray[3] = sc.next();
+                    temp = Integer.parseInt(newArray[3]);
+                }
+                
+                // Checking Correct Character
+                while (!((newArray[2].equals("+"))||(newArray[2].equals("-"))||(newArray[2].equals("*"))||(newArray[2].equals("/"))||(newArray[2].equals("%")))){
+                    System.out.println("Invalid Character, please re-enter whole string.");
+                    input = sc.nextLine();
+                    newArray = sorting(input);
+                }
 
                 int word = 1;
                 // Checking if input and output bases are between 2 and 10 (inclusive)
                 while (!((inputBase >= 2) && (inputBase <= 10))) {
-                    System.out.println("Invalid Input Base");
+                    System.out.println("Invalid Input Base, please enter it again.");
                     inputBase = sc.nextInt();
                     newArray[0] = String.valueOf(inputBase);
                 }
                 while (!((outputBase >= 2) && (outputBase <= 10))) {
-                    System.out.println("Invalid Input Base");
+                    System.out.println("Invalid Output Base, please enter it again.");
                     outputBase = sc.nextInt();
                 }
-
                 System.out.println(Arrays.toString(newArray));
-                int[] int1 = convertArray(sorting(input), word);
+
+                // Declaring both integers
+                int[] int1 = convertArray(newArray, word);
                 word = 3;
-                int[] int2 = convertArray(sorting(input), word);
+                int[] int2 = convertArray(newArray, word);
                 System.out.println(Arrays.toString(int1) + "\n" + Arrays.toString(int2));
 
+                //Declaring both integers value to base 10
                 int[] base10 = base10(int1, int2, Integer.parseInt(newArray[0]));// Inputs converted to base10
                 System.out.println(Arrays.toString(base10));
 
+                // Base 10 answer after operation
                 int[] baseTenOutput = operations(base10, newArray);
                 System.out.println(Arrays.toString(baseTenOutput));
-                System.out.println((outputConverter(outputBase, baseTenOutput))); // Prints out final output
+
+                // Final Output
+                System.out.println("Answer: " + (outputConverter(outputBase, baseTenOutput)));
 
             } else if (option == 2) {
                 menu = false;
