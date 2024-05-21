@@ -78,7 +78,6 @@ public class Main {
                 int[] int1 = convertArray(newArray, word);
                 word = 3;
                 int[] int2 = convertArray(newArray, word);
-                System.out.println(Arrays.toString(int1) + "\n" + Arrays.toString(int2));
 
                 //Declaring both integers value to base 10
                 int[] base10 = base10(int1, int2, Integer.parseInt(newArray[0]));// Inputs converted to base10
@@ -86,7 +85,6 @@ public class Main {
 
                 // Base 10 answer after operation
                 int[] baseTenOutput = operations(base10, newArray);
-                System.out.println(Arrays.toString(baseTenOutput));
 
                 int finalAns = outputConverter(outputBase, baseTenOutput);
                 // Final Output
@@ -95,8 +93,6 @@ public class Main {
                 } else {
                     System.out.println("Answer: " + finalAns +" R "+ baseTenOutput[1]);
                 }
-
-
             } else if (option == 2) {
                 menu = false;
                 System.out.println("bye!");
