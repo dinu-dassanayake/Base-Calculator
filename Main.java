@@ -7,7 +7,7 @@ public class Main {
         int option;
         Scanner sc = new Scanner(System.in);
         do {
-            System.out.println("1. Enter Calculator\n2. Exit Program");
+            System.out.println("\nBase Calculator\n1. Enter Calculator\n2. Exit Program");
             option = sc.nextInt();
             String input = "";
             sc.nextLine();
@@ -17,6 +17,7 @@ public class Main {
                 input = sc.nextLine();
 
                 //Checking for invalid amount of spaces
+                input = input.trim();
                 int spaceCount;
                 do {
                     spaceCount = 0;
@@ -61,6 +62,9 @@ public class Main {
                     } else {
                         negative = false;
                     }
+                } while (negative);
+                negative = false;
+                do {
                     if (newArray[3].charAt(0) == '-') {
                         negative = true;
                         System.out.println("Invalid Input 2");
@@ -68,7 +72,7 @@ public class Main {
                     } else {
                         negative = false;
                     }
-                } while (negative);
+                }while(negative);
 
                 // Checking if input and output bases are between 2 and 10 (inclusive)
                 while (((inputBase < 2) || (inputBase > 10))) {
@@ -123,9 +127,9 @@ public class Main {
                 while (temp < 0) {
                     System.out.println("Second Int is Invalid, please re-enter a valid integer.");
                     newArray[3] = sc.next();
+                    sc.nextLine();
                     temp = Integer.parseInt(newArray[3]);
                 }
-
 
                 // Checking Correct Character
                 while (!((newArray[2].equals("+")) || (newArray[2].equals("-")) || (newArray[2].equals("*")) || (newArray[2].equals("/")) || (newArray[2].equals("%")))) {
@@ -140,11 +144,8 @@ public class Main {
                 word = 3;
                 int[] int2 = convertArray(newArray, word);
 
-                System.out.println(Arrays.toString(newArray));
-
                 //Declaring both integers value to base 10
                 int[] base10 = base10(int1, int2, Integer.parseInt(newArray[0]));// Inputs converted to base10
-                System.out.println(Arrays.toString(base10));
 
                 // Base 10 answer after operation
                 int[] baseTenOutput = operations(base10, newArray);
@@ -153,10 +154,11 @@ public class Main {
                 int finalAns = outputConverter(outputBase, baseTenOutput);
                 int finalRemainder = remainderOutputConverter(outputBase, baseTenOutput);
                 if (baseTenOutput[1] == 0) {  //Remainder
-                    System.out.println("Answer: " + finalAns);
+                    System.out.println("Answer: " + finalAns+"\n");
                 } else {
-                    System.out.println("Answer: " + finalAns + " R " + finalRemainder);
+                    System.out.println("Answer: " + finalAns + " R " + finalRemainder+"\n");
                 }
+                menu=true;
             } else if (option == 2) {
                 menu = false;
                 System.out.println("bye!");
