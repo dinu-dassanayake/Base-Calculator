@@ -16,7 +16,6 @@ public class Main {
                 System.out.println("Enter the input base for both Integers, Integer 1, operand, then Integer 2");
                 input = sc.nextLine();
 
-                /*
                 //Checking for invalid amount of spaces
                 int spaceCount;
                 do {
@@ -30,14 +29,12 @@ public class Main {
                         System.out.println("Incorrect Number of Spaces, please try again.");
                         input = sc.nextLine();
                     }
-                }while(spaceCount==3);
-                 */
+                }while(spaceCount!=3);
 
                 System.out.println("Enter the output base between 2 and 10");
                 int outputBase = sc.nextInt();
                 sc.nextLine();
                 String[] newArray = sorting(input);
-                System.out.println(Arrays.toString(newArray));//remove
 
                 //Check for invalid characters
                 for (int i = 0; i < newArray.length; i++) {
@@ -84,7 +81,6 @@ public class Main {
                     System.out.println("Invalid Output Base, please enter it again.");
                     outputBase = sc.nextInt();
                 }
-                System.out.println(Arrays.toString(newArray));
 
                 // Checking if valid base
                 boolean repeat = true;
@@ -143,6 +139,8 @@ public class Main {
                 int[] int1 = convertArray(newArray, word);
                 word = 3;
                 int[] int2 = convertArray(newArray, word);
+
+                System.out.println(Arrays.toString(newArray));
 
                 //Declaring both integers value to base 10
                 int[] base10 = base10(int1, int2, Integer.parseInt(newArray[0]));// Inputs converted to base10
