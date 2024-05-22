@@ -1,6 +1,6 @@
 import java.util.Arrays;
 import java.util.Scanner;
-//ask mr.Donald about why my code doesn't work for the commented snippet below
+
 public class Main {
     public static void main(String[] args) {
         boolean menu = true;
@@ -13,7 +13,7 @@ public class Main {
             sc.nextLine();
             if (option == 1) {
                 menu = false;
-                System.out.println("Enter the base for both integers, integer, operand, and integer");
+                System.out.println("Enter the input base for both Integers, Integer 1, operand, then Integer 2");
                 input = sc.nextLine();
 
                 /*
@@ -87,22 +87,34 @@ public class Main {
                 System.out.println(Arrays.toString(newArray));
 
                 // Checking if valid base
-                int q = Integer.parseInt(newArray[1].substring(0));
-                String intString = String.valueOf(q);
-                for (int i = 0; i <= newArray[1].length() - 1; i++) {
-                    if (Integer.parseInt(intString.substring(i, i + 1)) >= inputBase) {
-                        System.out.println("Integer 1 is not in the valid base, please re-enter a valid integer.");
-                        newArray[1] = sc.next();
+                boolean repeat = true;
+                do {
+                    int q = Integer.parseInt(newArray[1].substring(0));
+                    String intString = String.valueOf(q);//??
+                    for (int i = 0; i <= newArray[1].length() - 1; i++) {
+                        if (Integer.parseInt(intString.substring(i, i + 1)) >= inputBase) {
+                            System.out.println("Integer 1 is not in the valid base, please re-enter a valid integer.");
+                            newArray[1] = sc.next();
+                            break;
+                        } else {
+                            repeat = false;
+                        }
                     }
-                }
-                q = Math.abs(Integer.parseInt(newArray[3].substring(0)));
-                intString = String.valueOf(q);
-                for (int k = 0; k <= newArray[3].length() - 1; k++) {
-                    if (Integer.parseInt(intString.substring(k, k + 1)) >= inputBase) {
-                        System.out.println("Integer 2 is not in the valid base, please re-enter a valid integer.");
-                        newArray[3] = sc.next();
+                }while(repeat);
+                repeat = true;
+                do {
+                    int q = Integer.parseInt(newArray[3].substring(0));
+                    String intString = String.valueOf(q);
+                    for (int k = 0; k <= newArray[3].length() - 1; k++) {
+                        if (Integer.parseInt(intString.substring(k, k + 1)) >= inputBase) {
+                            System.out.println("Integer 2 is not in the valid base, please re-enter a valid integer.");
+                            newArray[3] = sc.next();
+                            break;
+                        } else {
+                            repeat = false;
+                        }
                     }
-                }
+                }while(repeat);
 
                 // Checking if both ints are positive
                 int temp = Integer.parseInt(newArray[1].substring(0));
@@ -141,10 +153,11 @@ public class Main {
 
                 // Final Output
                 int finalAns = outputConverter(outputBase, baseTenOutput);
+                int finalRemainder = remainderOutputConverter(outputBase, baseTenOutput);
                 if (baseTenOutput[1] == 0) {  //Remainder
                     System.out.println("Answer: " + finalAns);
                 } else {
-                    System.out.println("Answer: " + finalAns + " R " + baseTenOutput[1]);
+                    System.out.println("Answer: " + finalAns + " R " + finalRemainder);
                 }
             } else if (option == 2) {
                 menu = false;
@@ -261,5 +274,19 @@ public class Main {
             }
             return result - (result * 2);
         }
+    }
+    public static int remainderOutputConverter(int outputBase, int[] a) {
+        int initial = Math.abs(a[1]);
+        int remainder;
+        int result = 0;
+        int multiplier = 1;
+
+        while (initial > 0) {
+            remainder = initial % outputBase;
+            result += remainder * multiplier;
+            initial = initial / outputBase;
+            multiplier = multiplier * 10;
+        }
+        return result;
     }
 }
