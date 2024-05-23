@@ -100,7 +100,6 @@ public class Main {
                         validInput = false;
                     }
 
-                    System.out.println(Arrays.toString(newArray));
                     count++;
                 } while (!validInput);
 
@@ -315,7 +314,6 @@ public class Main {
                 input+=newArray[i] + " ";
             }
         }
-        System.out.println(input+"b");
         return input;
     }
 }
