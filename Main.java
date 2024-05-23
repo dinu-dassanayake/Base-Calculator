@@ -13,130 +13,96 @@ public class Main {
             sc.nextLine();
             if (option == 1) {
                 menu = false;
+                boolean validInput = true;
                 System.out.println("Enter the input base for both Integers, Integer 1, operand, then Integer 2");
-                input = sc.nextLine();
-
-                //Checking for invalid amount of spaces
-                input = input.trim();
-                int spaceCount;
-                do {
-                    spaceCount = 0;
-                    for(int i = 0; i<input.length(); i++){
-                        if(input.charAt(i)==' '){
-                            spaceCount++;
-                        }
-                    }
-                    if(spaceCount!=3){
-                        System.out.println("Incorrect Number of Spaces, please try again.");
-                        input = sc.nextLine();
-                    }
-                }while(spaceCount!=3);
-
+                input = sc.nextLine().trim();
                 System.out.println("Enter the output base between 2 and 10");
                 int outputBase = sc.nextInt();
                 sc.nextLine();
-                String[] newArray = sorting(input);
-
-                //Check for invalid characters
-                for (int i = 0; i < newArray.length; i++) {
-                    if (i == 2) {
-                        i++;
-                    }
-                    for (int h = 0; h < newArray[i].length(); h++) {
-                        if ((!((newArray[i].charAt(h) >= '0') && (newArray[i].charAt(h) <= '9'))&&(newArray[i].charAt(h)!='-'))) {
-                            System.out.println("Invalid Character, please re-enter whole string.");
-                            input = sc.nextLine();
-                            newArray = sorting(input);
-                        }
-                    }
-                }
-                int inputBase = Integer.parseInt(newArray[0]);
-
-                //Check for Negative Inputs
-                boolean negative = false;
-                do {
-                    if (newArray[1].charAt(0) == '-') {
-                        negative = true;
-                        System.out.println("Invalid Input 1");
-                        newArray[1] = sc.next();
-                    } else {
-                        negative = false;
-                    }
-                } while (negative);
-                negative = false;
-                do {
-                    if (newArray[3].charAt(0) == '-') {
-                        negative = true;
-                        System.out.println("Invalid Input 2");
-                        newArray[3] = sc.next();
-                    } else {
-                        negative = false;
-                    }
-                }while(negative);
-
-                // Checking if input and output bases are between 2 and 10 (inclusive)
-                while (((inputBase < 2) || (inputBase > 10))) {
-                    System.out.println("Invalid Input Base, please enter it again.");
-                    inputBase = sc.nextInt();
-                    newArray[0] = String.valueOf(inputBase);
-                    inputBase = Integer.parseInt(newArray[0]);
-                }
-                while (((outputBase < 2) || (outputBase > 10))) {
-                    System.out.println("Invalid Output Base, please enter it again.");
+                while (!(outputBase >= 2 && outputBase <= 10)) {
+                    System.out.println("Invalid Output Base, please re-enter.");
                     outputBase = sc.nextInt();
-                }
-
-                // Checking if valid base
-                boolean repeat = true;
-                do {
-                    int q = Integer.parseInt(newArray[1].substring(0));
-                    String intString = String.valueOf(q);//??
-                    for (int i = 0; i <= newArray[1].length() - 1; i++) {
-                        if (Integer.parseInt(intString.substring(i, i + 1)) >= inputBase) {
-                            System.out.println("Integer 1 is not in the valid base, please re-enter a valid integer.");
-                            newArray[1] = sc.next();
-                            break;
-                        } else {
-                            repeat = false;
-                        }
-                    }
-                }while(repeat);
-                repeat = true;
-                do {
-                    int q = Integer.parseInt(newArray[3].substring(0));
-                    String intString = String.valueOf(q);
-                    for (int k = 0; k <= newArray[3].length() - 1; k++) {
-                        if (Integer.parseInt(intString.substring(k, k + 1)) >= inputBase) {
-                            System.out.println("Integer 2 is not in the valid base, please re-enter a valid integer.");
-                            newArray[3] = sc.next();
-                            break;
-                        } else {
-                            repeat = false;
-                        }
-                    }
-                }while(repeat);
-
-                // Checking if both ints are positive
-                int temp = Integer.parseInt(newArray[1].substring(0));
-                while (temp < 0) { //CAN THEY BE ZERO
-                    System.out.println("First Int is Invalid, please re-enter a valid integer.");
-                    newArray[1] = sc.next();
-                    temp = Integer.parseInt(newArray[1]);
-                }
-                temp = Integer.parseInt(newArray[3].substring(0));
-                while (temp < 0) {
-                    System.out.println("Second Int is Invalid, please re-enter a valid integer.");
-                    newArray[3] = sc.next();
                     sc.nextLine();
-                    temp = Integer.parseInt(newArray[3]);
                 }
+                String[] newArray = new String[4];
+                int count = 0;
+                do {
+                    validInput = true;
+                    int inputBase = 0;
 
-                // Checking Correct Character
-                while (!((newArray[2].equals("+")) || (newArray[2].equals("-")) || (newArray[2].equals("*")) || (newArray[2].equals("/")) || (newArray[2].equals("%")))) {
-                    System.out.println("Invalid Character, please re-enter whole string.");
-                    input = sc.nextLine();
+                    if(count>0) {
+                        input = rebuildInput(newArray);
+                    }
+
+                    // Checking for invalid amount of spaces
+                    while (!validSpaceCount(input)) {
+                        System.out.println("Incorrect Number of Spaces, please try again.");
+                        input = sc.nextLine().trim();
+                        validInput = false;
+                    }
+
                     newArray = sorting(input);
-                }
+                    // Check for invalid characters
+                    while (!validCharacters(newArray)) {
+                        System.out.println("Invalid Character, please re-enter whole string.");
+                        input = sc.nextLine().trim();
+                        newArray = sorting(input);
+                        validInput = false;
+                    }
+                    newArray = sorting(input);
+
+                    // Checking correct operator
+                    while(!validOperation(newArray[2])) {
+                        System.out.println("Invalid Operator, please re-enter whole string.");
+                        input = sc.nextLine();
+                        newArray = sorting(input);
+                        validInput = false;
+                    }
+
+                    // Extracting and validating input base
+                    inputBase = Integer.parseInt(newArray[0]);
+                    while (!validBase(inputBase)) {
+                        System.out.println("Invalid Input Base, please enter it again.");
+                        newArray[0] = sc.nextLine();
+                        inputBase = Integer.parseInt(newArray[0]);
+                        validInput = false;
+                    }
+
+                    // Check for negative inputs
+                    while (negativeNum(newArray[1])) {
+                        System.out.println("Invalid Input 1");
+                        newArray[1] = sc.nextLine();
+                        validInput = false;
+                    }
+                    while (negativeNum(newArray[3])) {
+                        System.out.println("Invalid Input 2");
+                        newArray[3] = sc.nextLine();
+                        validInput = false;
+                    }
+
+                    // Checking if integers are in valid base
+                    while (!validInteger(newArray[1], inputBase)) {
+                        System.out.println("Integer 1 is not in the valid base, please re-enter a valid integer.");
+                        newArray[1] = sc.nextLine();
+                        validInput = false;
+                    }
+                    while (!validInteger(newArray[3], inputBase)) {
+                        System.out.println("Integer 2 is not in the valid base, please re-enter a valid integer.");
+                        newArray[3] = sc.nextLine();
+                        validInput = false;
+                    }
+
+                    // Checking if both integers are positive
+                    while(!isPositive(newArray[1]) || !isPositive(newArray[3])) {
+                        System.out.println("Integers must be positive, please re-enter the integers.");
+                        newArray[1] = sc.nextLine();
+                        newArray[3] = sc.nextLine();
+                        validInput = false;
+                    }
+
+                    System.out.println(Arrays.toString(newArray));
+                    count++;
+                } while (!validInput);
 
                 // Declaring both integers
                 int word = 1;
@@ -154,11 +120,11 @@ public class Main {
                 int finalAns = outputConverter(outputBase, baseTenOutput);
                 int finalRemainder = remainderOutputConverter(outputBase, baseTenOutput);
                 if (baseTenOutput[1] == 0) {  //Remainder
-                    System.out.println("Answer: " + finalAns+"\n");
+                    System.out.println("Answer: " + finalAns + "\n");
                 } else {
-                    System.out.println("Answer: " + finalAns + " R " + finalRemainder+"\n");
+                    System.out.println("Answer: " + finalAns + " R " + finalRemainder + "\n");
                 }
-                menu=true;
+                menu = true;
             } else if (option == 2) {
                 menu = false;
                 System.out.println("bye!");
@@ -275,6 +241,7 @@ public class Main {
             return result - (result * 2);
         }
     }
+
     public static int remainderOutputConverter(int outputBase, int[] a) {
         int initial = Math.abs(a[1]);
         int remainder;
@@ -288,5 +255,67 @@ public class Main {
             multiplier = multiplier * 10;
         }
         return result;
+    }
+
+    public static boolean validSpaceCount(String input) {
+        int spaceCount = 0;
+        input = input.trim();
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) == ' ') {
+                spaceCount++;
+            }
+        }
+        return spaceCount == 3;
+    }
+
+    public static boolean validBase(int base) {
+        return (base >= 2) && (base <= 10);
+    }
+
+    public static boolean validCharacters(String[] newArray) {
+        for (int i = 0; i < newArray.length; i++) {
+            if (i == 2) {
+                i++;
+            }
+            for (int h = 0; h < newArray[i].length(); h++) {
+                if ((!((newArray[i].charAt(h) >= '0') && (newArray[i].charAt(h) <= '9')) && (newArray[i].charAt(h) != '-'))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean negativeNum(String str) {
+        return str.charAt(0) == '-';
+    }
+
+    public static boolean validInteger(String str, int inputBase) {
+        for (int i = 0; i <= str.length() - 1; i++) {
+            if (Integer.parseInt(str.substring(i, i + 1)) >= inputBase) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isPositive(String str) {
+        return Integer.parseInt(str) >= 0;
+    }
+
+    public static boolean validOperation(String str) {
+        return str.equals("+") || str.equals("-") || str.equals("*") || str.equals("/") || str.equals("%");
+    }
+    public static String rebuildInput(String[] newArray){
+        String input = "";
+        for(int i = 0; i<newArray.length; i++){
+            if(i==3){
+                input+=newArray[i];
+            } else{
+                input+=newArray[i] + " ";
+            }
+        }
+        System.out.println(input+"b");
+        return input;
     }
 }
